@@ -3,7 +3,7 @@ interface Props {
   current?: string;
 }
 
-const { current = '' } = Props;
+const { current = '' } = Astro.props;
 
 const navItems = [
   { href: '/', label: '首页', icon: '🏠' },
