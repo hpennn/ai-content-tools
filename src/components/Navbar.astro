@@ -1,0 +1,78 @@
+---
+interface Props {
+  current?: string;
+}
+
+const { current = '' } = Props;
+
+const navItems = [
+  { href: '/', label: '首页', icon: '🏠' },
+  { href: '/xiaohongshu', label: '小红书笔记', icon: '📕' },
+  { href: '/rewrite', label: '多平台改写', icon: '🔄' },
+  { href: '/scoring', label: '文案评分', icon: '📊' },
+  { href: '/sensitive', label: '违禁词检测', icon: '🔍' },
+  { href: '/video-script', label: '视频脚本', icon: '🎬' },
+];
+---
+
+<nav class="sticky top-0 z-50 glass border-b border-white/20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-2">
+        <span class="text-2xl">✨</span>
+        <span class="text-lg font-bold gradient-text hidden sm:inline">AI 创作工具箱</span>
+      </a>
+      
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-1">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+              current === item.href
+                ? 'bg-purple-100 text-purple-700'
+                : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
+            }`}
+          >
+            <span class="mr-1">{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-purple-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4">
+      <div class="grid grid-cols-2 gap-2">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class={`px-3 py-2 rounded-lg text-sm font-medium transition-all text-center ${
+              current === item.href
+                ? 'bg-purple-100 text-purple-700'
+                : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
+            }`}
+          >
+            <span class="mr-1">{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>
