@@ -97,7 +97,7 @@ import Navbar from '../components/Navbar.astro';
     </div>
   </div>
 
-  <script type="module">
+  <script is:inline type="module">
     import { streamChat, prompts } from '../utils/ai';
 
     const originalTextEl = document.getElementById('original-text') as HTMLTextAreaElement;

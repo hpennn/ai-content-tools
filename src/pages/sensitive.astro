@@ -85,7 +85,7 @@ import Navbar from '../components/Navbar.astro';
     </div>
   </div>
 
-  <script type="module">
+  <script is:inline type="module">
     import { detectSensitiveWords } from '../utils/sensitive-words';
 
     const textInputEl = document.getElementById('text-input') as HTMLTextAreaElement;
