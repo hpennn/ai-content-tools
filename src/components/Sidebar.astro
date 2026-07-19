@@ -1,0 +1,81 @@
+---
+interface Props {
+  current?: string;
+}
+
+const { current = '' } = Props;
+
+const navItems = [
+  { href: '/', label: '首页', icon: '🏠', desc: '工具总览' },
+  { href: '/xiaohongshu', label: '小红书笔记', icon: '📕', desc: '爆款笔记创作' },
+  { href: '/rewrite', label: '多平台改写', icon: '🔄', desc: '一键多平台适配' },
+  { href: '/scoring', label: '文案评分', icon: '📊', desc: '多维度评分' },
+  { href: '/sensitive', label: '违禁词检测', icon: '🔍', desc: '敏感词扫描' },
+  { href: '/video-script', label: '视频脚本', icon: '🎬', desc: '分镜脚本生成' },
+];
+---
+
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 lg:translate-x-0 -translate-x-full">
+  <!-- Logo -->
+  <div class="flex items-center gap-3 px-5 h-16 border-b border-gray-100 shrink-0">
+    <span class="text-2xl">✨</span>
+    <div>
+      <h1 class="text-base font-bold gradient-text">AI 创作工具箱</h1>
+      <p class="text-[10px] text-gray-400">自媒体创作助手</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto scrollbar-thin">
+    {navItems.map((item) => {
+      const isActive = current === item.href;
+      return (
+        <a
+          href={item.href}
+          class={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all group ${
+            isActive
+              ? 'bg-purple-50 text-purple-700 font-semibold nav-active'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+          }`}
+        >
+          <span class={`text-lg shrink-0 ${isActive ? '' : 'group-hover:scale-110'} transition-transform`}>{item.icon}</span>
+          <div class="min-w-0">
+            <div class="truncate">{item.label}</div>
+            <div class={`text-[10px] truncate ${isActive ? 'text-purple-400' : 'text-gray-400'}`}>{item.desc}</div>
+          </div>
+        </a>
+      );
+    })}
+  </nav>
+
+  <!-- Footer -->
+  <div class="px-5 py-4 border-t border-gray-100 shrink-0">
+    <p class="text-[10px] text-gray-400 text-center">Powered by 豆包大模型</p>
+  </div>
+</aside>
+
+<!-- Mobile overlay -->
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/30 z-30 hidden lg:hidden" onclick="document.getElementById('sidebar').classList.add('-translate-x-full'); this.classList.add('hidden');"></div>
+
+<!-- Mobile top bar -->
+<div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center px-4 lg:hidden">
+  <button id="mobile-menu-btn" class="p-2 -ml-2 rounded-lg text-gray-600 hover:bg-gray-100">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+  <span class="ml-3 text-sm font-bold gradient-text">AI 创作工具箱</span>
+</div>
+
+<script is:inline>
+  var btn = document.getElementById('mobile-menu-btn');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+  }
+</script>

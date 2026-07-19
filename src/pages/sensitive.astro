@@ -1,174 +1,200 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
+import Sidebar from '../components/Sidebar.astro';
 ---
 
 <Layout title="违禁词检测">
-  <Navbar current="/sensitive" />
+  <Sidebar current="/sensitive" />
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-        <span class="text-3xl">🔍</span> 违禁词检测
+  <main class="flex-1 lg:ml-64 mt-14 lg:mt-0 h-full flex flex-col overflow-hidden">
+    <!-- Header -->
+    <div class="shrink-0 px-4 sm:px-6 py-4 border-b border-gray-100 bg-white/60 backdrop-blur">
+      <h1 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <span class="text-xl">🔍</span> 违禁词检测
       </h1>
-      <p class="text-gray-500 mt-1">200+ 违禁词库，覆盖广告法违禁词 + 各平台敏感词，实时检测</p>
+      <p class="text-xs text-gray-400 mt-0.5">200+ 违禁词库，覆盖广告法违禁词 + 各平台敏感词</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- 左侧输入区 -->
-      <div class="space-y-5">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">文案内容 *</label>
-          <textarea id="text-input" rows="10" placeholder="粘贴你的文案内容，点击检测按钮..."
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm resize-none focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all"></textarea>
+    <!-- Chat area -->
+    <div id="chat-area" class="flex-1 overflow-y-auto scrollbar-thin px-4 sm:px-6 py-6">
+      <div class="flex items-start gap-3 mb-6">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-xs shrink-0 shadow">🔍</div>
+        <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100 max-w-[85%]">
+          <p class="text-sm text-gray-700">粘贴你的文案，我来检测违禁词 🛡️</p>
+          <p class="text-xs text-gray-400 mt-1">支持广告法违禁词、各平台敏感词检测，自动标注并给出替换建议</p>
         </div>
+      </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">检测平台</label>
+      <!-- Stats area (hidden initially) -->
+      <div id="stats-area" class="hidden mb-4">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 shrink-0"></div>
+          <div class="flex gap-2 flex-wrap">
+            <div class="bg-white rounded-lg border border-gray-100 px-3 py-1.5 shadow-sm text-center">
+              <span class="text-lg font-bold text-gray-900" id="stat-total">0</span>
+              <span class="text-xs text-gray-400 ml-1">总计</span>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-100 px-3 py-1.5 shadow-sm text-center">
+              <span class="text-lg font-bold text-red-500" id="stat-high">0</span>
+              <span class="text-xs text-gray-400 ml-1">高危</span>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-100 px-3 py-1.5 shadow-sm text-center">
+              <span class="text-lg font-bold text-orange-500" id="stat-medium">0</span>
+              <span class="text-xs text-gray-400 ml-1">中危</span>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-100 px-3 py-1.5 shadow-sm text-center">
+              <span class="text-lg font-bold text-yellow-500" id="stat-low">0</span>
+              <span class="text-xs text-gray-400 ml-1">低危</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result container -->
+      <div id="result-container" class="hidden"></div>
+
+      <!-- Detail list -->
+      <div id="detail-area" class="hidden mb-4">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 shrink-0"></div>
+          <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100 flex-1 max-w-[85%]">
+            <p class="text-xs font-semibold text-gray-700 mb-2">📋 违禁词详情</p>
+            <div id="detail-list" class="space-y-2 max-h-60 overflow-y-auto scrollbar-thin"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="shrink-0 border-t border-gray-100 bg-white px-4 sm:px-6 py-4">
+      <div class="max-w-3xl mx-auto space-y-3">
+        <textarea id="text-input" rows="3" placeholder="粘贴你的文案内容，点击检测按钮..."
+          class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm resize-none focus:border-purple-400 transition-all"></textarea>
+        <div class="flex gap-3 items-center">
           <select id="platform-select"
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all bg-white">
-            <option value="all">🌐 通用（全平台通用检测）</option>
+            class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-400 transition-all bg-white">
+            <option value="all">🌐 通用检测</option>
             <option value="xiaohongshu">📕 小红书</option>
             <option value="douyin">🎵 抖音</option>
             <option value="gongzhonghao">💚 公众号</option>
           </select>
-        </div>
-
-        <button id="detect-btn"
-          class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-purple-700 hover:to-pink-600 transition-all active:scale-[0.98]">
-          🔍 开始检测
-        </button>
-      </div>
-
-      <!-- 右侧结果区 -->
-      <div class="space-y-4">
-        <!-- 统计卡片 -->
-        <div id="stats-area" class="hidden">
-          <div class="grid grid-cols-4 gap-3">
-            <div class="bg-white rounded-xl border border-gray-100 p-4 text-center shadow-sm">
-              <p class="text-2xl font-bold text-gray-900" id="stat-total">0</p>
-              <p class="text-xs text-gray-500 mt-1">总计</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4 text-center shadow-sm">
-              <p class="text-2xl font-bold text-red-500" id="stat-high">0</p>
-              <p class="text-xs text-gray-500 mt-1">高危</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4 text-center shadow-sm">
-              <p class="text-2xl font-bold text-orange-500" id="stat-medium">0</p>
-              <p class="text-xs text-gray-500 mt-1">中危</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-4 text-center shadow-sm">
-              <p class="text-2xl font-bold text-yellow-500" id="stat-low">0</p>
-              <p class="text-xs text-gray-500 mt-1">低危</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 标注结果 -->
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm min-h-[300px] flex flex-col">
-          <h3 class="font-semibold text-gray-700 mb-4">检测结果</h3>
-          <div id="result-area" class="flex-1 overflow-y-auto scrollbar-thin">
-            <div class="flex flex-col items-center justify-center h-64 text-gray-400">
-              <span class="text-5xl mb-4">🔍</span>
-              <p class="text-sm">粘贴文案，点击检测按钮</p>
-              <p class="text-xs mt-1">将自动标红违禁词并给出替换建议</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 违禁词详情列表 -->
-        <div id="detail-area" class="hidden bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <h3 class="font-semibold text-gray-700 mb-4">违禁词详情</h3>
-          <div id="detail-list" class="space-y-3 max-h-80 overflow-y-auto scrollbar-thin"></div>
+          <button id="detect-btn"
+            class="ml-auto px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white text-sm font-semibold rounded-xl shadow hover:shadow-lg hover:from-purple-700 hover:to-pink-600 transition-all active:scale-[0.97] shrink-0">
+            🔍 检测
+          </button>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <script is:inline type="module">
     import { detectSensitiveWords } from '../utils/sensitive-words';
 
-    const textInputEl = document.getElementById('text-input') as HTMLTextAreaElement;
-    const platformSelectEl = document.getElementById('platform-select') as HTMLSelectElement;
-    const detectBtn = document.getElementById('detect-btn') as HTMLButtonElement;
-    const resultArea = document.getElementById('result-area') as HTMLDivElement;
-    const statsArea = document.getElementById('stats-area') as HTMLDivElement;
-    const detailArea = document.getElementById('detail-area') as HTMLDivElement;
-    const detailList = document.getElementById('detail-list') as HTMLDivElement;
+    var textInputEl = document.getElementById('text-input');
+    var platformSelectEl = document.getElementById('platform-select');
+    var detectBtn = document.getElementById('detect-btn');
+    var chatArea = document.getElementById('chat-area');
+    var statsArea = document.getElementById('stats-area');
+    var resultContainer = document.getElementById('result-container');
+    var detailArea = document.getElementById('detail-area');
+    var detailList = document.getElementById('detail-list');
 
-    detectBtn.addEventListener('click', () => {
-      const text = textInputEl.value.trim();
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function scrollToBottom() {
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    detectBtn.addEventListener('click', function() {
+      var text = textInputEl.value.trim();
       if (!text) {
         textInputEl.focus();
         textInputEl.classList.add('border-red-300');
-        setTimeout(() => textInputEl.classList.remove('border-red-300'), 2000);
+        setTimeout(function() { textInputEl.classList.remove('border-red-300'); }, 2000);
         return;
       }
 
-      const platform = platformSelectEl.value;
-      const results = detectSensitiveWords(text, platform);
+      var platform = platformSelectEl.value;
+      var results = detectSensitiveWords(text, platform);
 
-      // 更新统计
+      // User bubble
+      var existingUser = chatArea.querySelector('.justify-end');
+      if (existingUser) existingUser.remove();
+
+      var userBubble = document.createElement('div');
+      userBubble.className = 'flex items-start gap-3 mb-4 justify-end';
+      userBubble.innerHTML = '<div class="bg-purple-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-[85%]">' +
+        '<p class="text-sm whitespace-pre-wrap">' + escapeHtml(text.substring(0, 200)) + (text.length > 200 ? '...' : '') + '</p>' +
+        '<p class="text-xs opacity-80 mt-1">平台：' + escapeHtml(platform === 'all' ? '通用' : platform) + '</p>' +
+        '</div>' +
+        '<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs shrink-0">👤</div>';
+
+      var firstChild = chatArea.firstElementChild;
+      if (firstChild) {
+        chatArea.insertBefore(userBubble, firstChild.nextSibling);
+      }
+
+      // Update stats
       statsArea.classList.remove('hidden');
-      document.getElementById('stat-total')!.textContent = String(results.length);
-      document.getElementById('stat-high')!.textContent = String(results.filter(r => r.severity === 'high').length);
-      document.getElementById('stat-medium')!.textContent = String(results.filter(r => r.severity === 'medium').length);
-      document.getElementById('stat-low')!.textContent = String(results.filter(r => r.severity === 'low').length);
+      document.getElementById('stat-total').textContent = String(results.length);
+      document.getElementById('stat-high').textContent = String(results.filter(function(r) { return r.severity === 'high'; }).length);
+      document.getElementById('stat-medium').textContent = String(results.filter(function(r) { return r.severity === 'medium'; }).length);
+      document.getElementById('stat-low').textContent = String(results.filter(function(r) { return r.severity === 'low'; }).length);
 
-      // 标注文案
+      resultContainer.classList.remove('hidden');
+
       if (results.length === 0) {
-        resultArea.innerHTML = `
-          <div class="flex flex-col items-center justify-center py-8 text-green-600">
-            <span class="text-5xl mb-4">✅</span>
-            <p class="font-medium">未检测到违禁词</p>
-            <p class="text-sm text-gray-400 mt-1">文案安全，可以放心发布</p>
-          </div>
-        `;
+        resultContainer.innerHTML = '<div class="flex items-start gap-3 mb-4">' +
+          '<div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-xs shrink-0 shadow">✅</div>' +
+          '<div class="bg-green-50 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-green-100 max-w-[85%]">' +
+          '<p class="text-sm font-medium text-green-700">✅ 未检测到违禁词</p>' +
+          '<p class="text-xs text-green-500 mt-1">文案安全，可以放心发布</p></div></div>';
         detailArea.classList.add('hidden');
         return;
       }
 
-      // 高亮标注
-      let highlighted = '';
-      let lastIndex = 0;
-      for (const item of results) {
+      // Highlighted text bubble
+      var highlighted = '';
+      var lastIndex = 0;
+      for (var i = 0; i < results.length; i++) {
+        var item = results[i];
         highlighted += escapeHtml(text.substring(lastIndex, item.index));
-        const colorClass = item.severity === 'high' ? 'bg-red-100 text-red-700 border-red-200' :
-                          item.severity === 'medium' ? 'bg-orange-100 text-orange-700 border-orange-200' :
-                          'bg-yellow-100 text-yellow-700 border-yellow-200';
-        highlighted += `<mark class="${colorClass} px-1 py-0.5 rounded border font-medium cursor-help" title="${item.category}: ${item.suggestion}">${escapeHtml(item.word)}</mark>`;
+        var colorClass = item.severity === 'high' ? 'bg-red-100 text-red-700 border-red-200' :
+                        item.severity === 'medium' ? 'bg-orange-100 text-orange-700 border-orange-200' :
+                        'bg-yellow-100 text-yellow-700 border-yellow-200';
+        highlighted += '<mark class="' + colorClass + ' px-1 py-0.5 rounded border font-medium cursor-help" title="' + escapeHtml(item.category) + ': ' + escapeHtml(item.suggestion) + '">' + escapeHtml(item.word) + '</mark>';
         lastIndex = item.index + item.word.length;
       }
       highlighted += escapeHtml(text.substring(lastIndex));
 
-      resultArea.innerHTML = `<div class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">${highlighted}</div>`;
+      resultContainer.innerHTML = '<div class="flex items-start gap-3 mb-4">' +
+        '<div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-xs shrink-0 shadow">🔍</div>' +
+        '<div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100 max-w-[85%]">' +
+        '<div class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">' + highlighted + '</div></div></div>';
 
-      // 详情列表
+      // Detail list
       detailArea.classList.remove('hidden');
-      detailList.innerHTML = results.map((item) => {
-        const badgeClass = item.severity === 'high' ? 'bg-red-100 text-red-700' :
-                          item.severity === 'medium' ? 'bg-orange-100 text-orange-700' :
-                          'bg-yellow-100 text-yellow-700';
-        const badgeText = item.severity === 'high' ? '高危' : item.severity === 'medium' ? '中危' : '低危';
-        return `
-          <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-            <span class="px-2 py-0.5 text-xs font-medium rounded-full ${badgeClass}">${badgeText}</span>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2">
-                <span class="font-semibold text-gray-900">"${escapeHtml(item.word)}"</span>
-                <span class="text-xs text-gray-400">${item.category}</span>
-              </div>
-              <p class="text-xs text-gray-500 mt-1">💡 建议：${item.suggestion}</p>
-            </div>
-          </div>
-        `;
+      detailList.innerHTML = results.map(function(item) {
+        var badgeClass = item.severity === 'high' ? 'bg-red-100 text-red-700' :
+                        item.severity === 'medium' ? 'bg-orange-100 text-orange-700' :
+                        'bg-yellow-100 text-yellow-700';
+        var badgeText = item.severity === 'high' ? '高危' : item.severity === 'medium' ? '中危' : '低危';
+        return '<div class="flex items-start gap-2 p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">' +
+          '<span class="px-1.5 py-0.5 text-[10px] font-medium rounded-full ' + badgeClass + '">' + badgeText + '</span>' +
+          '<div class="flex-1 min-w-0">' +
+          '<div class="flex items-center gap-1.5">' +
+          '<span class="text-xs font-semibold text-gray-900">"' + escapeHtml(item.word) + '"</span>' +
+          '<span class="text-[10px] text-gray-400">' + escapeHtml(item.category) + '</span>' +
+          '</div>' +
+          '<p class="text-[10px] text-gray-500 mt-0.5">💡 ' + escapeHtml(item.suggestion) + '</p>' +
+          '</div></div>';
       }).join('');
-    });
 
-    function escapeHtml(text: string): string {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
+      scrollToBottom();
+    });
   </script>
 </Layout>

@@ -1,123 +1,108 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
+import Sidebar from '../components/Sidebar.astro';
 ---
 
 <Layout title="多平台文案改写">
-  <Navbar current="/rewrite" />
+  <Sidebar current="/rewrite" />
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-        <span class="text-3xl">🔄</span> 多平台文案改写
+  <main class="flex-1 lg:ml-64 mt-14 lg:mt-0 h-full flex flex-col overflow-hidden">
+    <!-- Header -->
+    <div class="shrink-0 px-4 sm:px-6 py-4 border-b border-gray-100 bg-white/60 backdrop-blur">
+      <h1 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <span class="text-xl">🔄</span> 多平台文案改写
       </h1>
-      <p class="text-gray-500 mt-1">一次输入，智能适配多个平台风格，每个版本差异明显</p>
+      <p class="text-xs text-gray-400 mt-0.5">一次输入，智能适配多个平台风格</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- 左侧输入区 -->
-      <div class="space-y-5">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">原始文案 *</label>
-          <textarea id="original-text" rows="8" placeholder="粘贴你的原始文案内容..."
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm resize-none focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all"></textarea>
-          <p class="text-xs text-gray-400 mt-2">支持任意格式的文案内容，AI 将自动理解并改写</p>
+    <!-- Chat area -->
+    <div id="chat-area" class="flex-1 overflow-y-auto scrollbar-thin px-4 sm:px-6 py-6">
+      <div class="flex items-start gap-3 mb-6">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs shrink-0 shadow">🔄</div>
+        <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100 max-w-[85%]">
+          <p class="text-sm text-gray-700">粘贴你的文案，选择目标平台，我帮你改写 📝</p>
+          <p class="text-xs text-gray-400 mt-1">支持小红书、公众号、抖音、知乎、视频号、快手、B站</p>
         </div>
+      </div>
+      <div id="result-container" class="hidden"></div>
+    </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">目标平台 * <span class="text-gray-400 font-normal">（可多选）</span></label>
-          <div class="grid grid-cols-2 gap-3" id="platform-options">
+    <!-- Input area -->
+    <div class="shrink-0 border-t border-gray-100 bg-white px-4 sm:px-6 py-4">
+      <div class="max-w-3xl mx-auto space-y-3">
+        <textarea id="original-text" rows="3" placeholder="粘贴你的原始文案内容..."
+          class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm resize-none focus:border-purple-400 transition-all"></textarea>
+        <div class="flex flex-wrap gap-2 items-center">
+          <div class="flex flex-wrap gap-1.5" id="platform-options">
             <label class="cursor-pointer">
               <input type="checkbox" value="小红书" class="hidden peer" checked />
-              <div class="peer-checked:border-red-400 peer-checked:bg-red-50 peer-checked:text-red-700 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-red-300">
-                📕 小红书
-              </div>
+              <div class="peer-checked:border-red-400 peer-checked:bg-red-50 peer-checked:text-red-700 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">📕 小红书</div>
             </label>
             <label class="cursor-pointer">
               <input type="checkbox" value="公众号" class="hidden peer" />
-              <div class="peer-checked:border-green-400 peer-checked:bg-green-50 peer-checked:text-green-700 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-green-300">
-                💚 公众号
-              </div>
+              <div class="peer-checked:border-green-400 peer-checked:bg-green-50 peer-checked:text-green-700 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">💚 公众号</div>
             </label>
             <label class="cursor-pointer">
               <input type="checkbox" value="抖音" class="hidden peer" />
-              <div class="peer-checked:border-gray-800 peer-checked:bg-gray-100 peer-checked:text-gray-800 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-gray-400">
-                🎵 抖音
-              </div>
+              <div class="peer-checked:border-gray-800 peer-checked:bg-gray-100 peer-checked:text-gray-800 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">🎵 抖音</div>
             </label>
             <label class="cursor-pointer">
               <input type="checkbox" value="知乎" class="hidden peer" />
-              <div class="peer-checked:border-blue-400 peer-checked:bg-blue-50 peer-checked:text-blue-700 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-blue-300">
-                💙 知乎
-              </div>
+              <div class="peer-checked:border-blue-400 peer-checked:bg-blue-50 peer-checked:text-blue-700 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">💙 知乎</div>
             </label>
             <label class="cursor-pointer">
               <input type="checkbox" value="视频号" class="hidden peer" />
-              <div class="peer-checked:border-orange-400 peer-checked:bg-orange-50 peer-checked:text-orange-700 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-orange-300">
-                📺 视频号
-              </div>
+              <div class="peer-checked:border-orange-400 peer-checked:bg-orange-50 peer-checked:text-orange-700 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">📺 视频号</div>
             </label>
             <label class="cursor-pointer">
               <input type="checkbox" value="快手" class="hidden peer" />
-              <div class="peer-checked:border-yellow-500 peer-checked:bg-yellow-50 peer-checked:text-yellow-700 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-yellow-400">
-                🟡 快手
-              </div>
+              <div class="peer-checked:border-yellow-500 peer-checked:bg-yellow-50 peer-checked:text-yellow-700 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">🟡 快手</div>
             </label>
             <label class="cursor-pointer">
               <input type="checkbox" value="B站" class="hidden peer" />
-              <div class="peer-checked:border-cyan-400 peer-checked:bg-cyan-50 peer-checked:text-cyan-700 border border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-medium transition-all hover:border-cyan-300">
-                📺 B站
-              </div>
+              <div class="peer-checked:border-cyan-400 peer-checked:bg-cyan-50 peer-checked:text-cyan-700 border border-gray-200 rounded-lg px-2 py-1 text-xs font-medium transition-all">📺 B站</div>
             </label>
           </div>
-        </div>
-
-        <button id="generate-btn"
-          class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-purple-700 hover:to-pink-600 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
-          ✨ 开始改写
-        </button>
-      </div>
-
-      <!-- 右侧结果区 -->
-      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm min-h-[500px] flex flex-col">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-semibold text-gray-700">改写结果</h3>
-          <button id="copy-btn" class="hidden text-sm text-purple-600 hover:text-purple-700 font-medium px-3 py-1 rounded-lg hover:bg-purple-50 transition-all">
-            📋 复制全部
+          <button id="generate-btn"
+            class="ml-auto px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white text-sm font-semibold rounded-xl shadow hover:shadow-lg hover:from-purple-700 hover:to-pink-600 transition-all active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed shrink-0">
+            ✨ 改写
           </button>
-        </div>
-        <div id="result-area" class="flex-1 overflow-y-auto scrollbar-thin">
-          <div class="flex flex-col items-center justify-center h-full text-gray-400">
-            <span class="text-5xl mb-4">🔄</span>
-            <p class="text-sm">输入原始文案，选择目标平台</p>
-            <p class="text-xs mt-1">AI 将生成多平台适配版本</p>
-          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <script is:inline type="module">
     import { streamChat, prompts } from '../utils/ai';
 
-    const originalTextEl = document.getElementById('original-text') as HTMLTextAreaElement;
-    const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
-    const resultArea = document.getElementById('result-area') as HTMLDivElement;
-    const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+    var originalTextEl = document.getElementById('original-text');
+    var generateBtn = document.getElementById('generate-btn');
+    var chatArea = document.getElementById('chat-area');
+    var resultContainer = document.getElementById('result-container');
 
-    let fullText = '';
+    var fullText = '';
 
-    generateBtn.addEventListener('click', async () => {
-      const originalText = originalTextEl.value.trim();
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function scrollToBottom() {
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    generateBtn.addEventListener('click', async function() {
+      var originalText = originalTextEl.value.trim();
       if (!originalText) {
         originalTextEl.focus();
         originalTextEl.classList.add('border-red-300');
-        setTimeout(() => originalTextEl.classList.remove('border-red-300'), 2000);
+        setTimeout(function() { originalTextEl.classList.remove('border-red-300'); }, 2000);
         return;
       }
 
-      const checkboxes = document.querySelectorAll('#platform-options input[type="checkbox"]:checked') as NodeListOf<HTMLInputElement>;
-      const platforms = Array.from(checkboxes).map(cb => cb.value);
+      var checkboxes = document.querySelectorAll('#platform-options input[type="checkbox"]:checked');
+      var platforms = Array.from(checkboxes).map(function(cb) { return cb.value; });
       if (platforms.length === 0) {
         alert('请至少选择一个目标平台');
         return;
@@ -126,42 +111,63 @@ import Navbar from '../components/Navbar.astro';
       fullText = '';
       generateBtn.disabled = true;
       generateBtn.innerHTML = '<span class="loading-dots">改写中</span>';
-      copyBtn.classList.add('hidden');
 
-      resultArea.innerHTML = '<div class="flex items-center gap-2 text-purple-600"><span class="text-xl">✨</span><span class="loading-dots">AI 正在改写</span></div>';
+      // User bubble
+      var userBubble = document.createElement('div');
+      userBubble.className = 'flex items-start gap-3 mb-4 justify-end';
+      userBubble.innerHTML = '<div class="bg-purple-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-[85%]">' +
+        '<p class="text-sm whitespace-pre-wrap">' + escapeHtml(originalText.substring(0, 200)) + (originalText.length > 200 ? '...' : '') + '</p>' +
+        '<p class="text-xs opacity-80 mt-1">目标平台：' + escapeHtml(platforms.join('、')) + '</p>' +
+        '</div>' +
+        '<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs shrink-0">👤</div>';
+      chatArea.insertBefore(userBubble, resultContainer);
 
-      const messages = prompts.rewrite(originalText, platforms);
+      // AI bubble
+      resultContainer.classList.remove('hidden');
+      resultContainer.innerHTML = '<div class="flex items-start gap-3 mb-4">' +
+        '<div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs shrink-0 shadow">🔄</div>' +
+        '<div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100 max-w-[85%] min-w-[300px]">' +
+        '<div class="flex items-center gap-2 text-purple-600"><span>✨</span><span class="loading-dots text-sm">正在改写</span></div>' +
+        '</div></div>';
+      scrollToBottom();
+
+      var messages = prompts.rewrite(originalText, platforms);
 
       await streamChat(messages, {
-        onChunk: (text) => {
+        onChunk: function(text) {
           fullText += text;
-          resultArea.innerHTML = `<div class="prose-result text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">${escapeHtml(fullText)}</div>`;
-          resultArea.scrollTop = resultArea.scrollHeight;
+          var bubble = resultContainer.querySelector('.bg-white.rounded-2xl');
+          if (bubble) {
+            bubble.innerHTML = '<div class="prose-result text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">' + escapeHtml(fullText) + '</div>';
+          }
+          scrollToBottom();
         },
-        onDone: () => {
+        onDone: function() {
           generateBtn.disabled = false;
           generateBtn.innerHTML = '✨ 重新改写';
-          copyBtn.classList.remove('hidden');
+          var bubble = resultContainer.querySelector('.bg-white.rounded-2xl');
+          if (bubble) {
+            var copyBtn = document.createElement('button');
+            copyBtn.className = 'mt-2 text-xs text-purple-600 hover:text-purple-700 font-medium px-2 py-1 rounded-lg hover:bg-purple-50 transition-all';
+            copyBtn.textContent = '📋 复制全部';
+            copyBtn.addEventListener('click', function() {
+              navigator.clipboard.writeText(fullText).then(function() {
+                copyBtn.textContent = '✅ 已复制';
+                setTimeout(function() { copyBtn.textContent = '📋 复制全部'; }, 2000);
+              });
+            });
+            bubble.appendChild(copyBtn);
+          }
         },
-        onError: (err) => {
-          resultArea.innerHTML = `<div class="text-red-500 text-sm p-4 bg-red-50 rounded-xl">${err}</div>`;
+        onError: function(err) {
+          resultContainer.innerHTML = '<div class="flex items-start gap-3 mb-4">' +
+            '<div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs shrink-0 shadow">🔄</div>' +
+            '<div class="bg-red-50 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-red-100 max-w-[85%]">' +
+            '<p class="text-sm text-red-600">' + escapeHtml(err) + '</p></div></div>';
           generateBtn.disabled = false;
-          generateBtn.innerHTML = '✨ 开始改写';
+          generateBtn.innerHTML = '✨ 改写';
         },
       });
     });
-
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(fullText).then(() => {
-        copyBtn.textContent = '✅ 已复制';
-        setTimeout(() => { copyBtn.textContent = '📋 复制全部'; }, 2000);
-      });
-    });
-
-    function escapeHtml(text: string): string {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
   </script>
 </Layout>

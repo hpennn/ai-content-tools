@@ -17,36 +17,77 @@ const { title, description = 'AI 驱动的自媒体创作工具箱，覆盖小�
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} - AI 创作工具箱</title>
+<<<<<<< HEAD
+=======
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script is:inline>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: { 50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea', 700: '#7e22ce', 800: '#6b21a8', 900: '#581c87' },
+              accent: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777', 700: '#be185d' },
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.4s ease-out',
+              'slide-up': 'slideUp 0.4s ease-out',
+              'slide-in-left': 'slideInLeft 0.3s ease-out',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { opacity: '0', transform: 'translateY(16px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+              slideInLeft: { '0%': { opacity: '0', transform: 'translateX(-12px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } },
+            },
+          },
+        },
+      };
+    </script>
+    <!-- 百度统计 -->
+    <script is:inline>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?BAIDU_STATS_ID";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+>>>>>>> 046ea92 (feat: 左侧导航+对话式交互改版，添加百度统计占位)
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
       body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-      .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
       .gradient-text { background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-      .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); }
-      .card-hover { transition: all 0.3s ease; }
-      .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15); }
+      .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); }
       .loading-dots::after { content: ''; animation: dots 1.5s steps(4) infinite; }
       @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
-      .prose-result h1, .prose-result h2, .prose-result h3 { margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; }
-      .prose-result h1 { font-size: 1.5rem; }
-      .prose-result h2 { font-size: 1.25rem; }
-      .prose-result h3 { font-size: 1.1rem; }
-      .prose-result p { margin-bottom: 0.75em; line-height: 1.8; }
-      .prose-result ul, .prose-result ol { padding-left: 1.5em; margin-bottom: 0.75em; }
-      .prose-result li { margin-bottom: 0.25em; }
-      .prose-result table { width: 100%; border-collapse: collapse; margin: 1em 0; }
-      .prose-result th, .prose-result td { border: 1px solid #e5e7eb; padding: 0.5em 0.75em; text-align: left; }
+      .prose-result h1, .prose-result h2, .prose-result h3 { margin-top: 1.2em; margin-bottom: 0.4em; font-weight: 600; }
+      .prose-result h1 { font-size: 1.4rem; }
+      .prose-result h2 { font-size: 1.2rem; }
+      .prose-result h3 { font-size: 1.05rem; }
+      .prose-result p { margin-bottom: 0.6em; line-height: 1.8; }
+      .prose-result ul, .prose-result ol { padding-left: 1.5em; margin-bottom: 0.6em; }
+      .prose-result li { margin-bottom: 0.2em; }
+      .prose-result table { width: 100%; border-collapse: collapse; margin: 0.8em 0; }
+      .prose-result th, .prose-result td { border: 1px solid #e5e7eb; padding: 0.4em 0.6em; text-align: left; font-size: 0.85rem; }
       .prose-result th { background: #f3e8ff; font-weight: 600; }
       .prose-result strong { color: #7e22ce; }
       .prose-result code { background: #f3e8ff; padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.9em; }
-      .prose-result blockquote { border-left: 3px solid #a855f7; padding-left: 1em; color: #6b7280; margin: 1em 0; }
-      textarea:focus, input:focus, select:focus { outline: none; ring: 2px; border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1); }
-      .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+      .prose-result blockquote { border-left: 3px solid #a855f7; padding-left: 1em; color: #6b7280; margin: 0.8em 0; }
+      textarea:focus, input:focus, select:focus { outline: none; border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1); }
+      .scrollbar-thin::-webkit-scrollbar { width: 5px; }
       .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
       .scrollbar-thin::-webkit-scrollbar-thumb { background: #d8b4fe; border-radius: 3px; }
+      .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #c084fc; }
+      /* Chat bubble animation */
+      .chat-bubble { animation: slideUp 0.3s ease-out; }
+      /* Sidebar active indicator */
+      .nav-active { position: relative; }
+      .nav-active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: linear-gradient(180deg, #a855f7, #ec4899); border-radius: 0 3px 3px 0; }
     </style>
   </head>
-  <body class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
-    <slot />
+  <body class="h-screen bg-gray-50 overflow-hidden">
+    <div class="flex h-full">
+      <slot />
+    </div>
   </body>
 </html>

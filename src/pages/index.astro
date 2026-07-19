@@ -1,106 +1,76 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
+import Sidebar from '../components/Sidebar.astro';
 
 const tools = [
-  {
-    href: '/xiaohongshu',
-    icon: '📕',
-    title: '小红书笔记创作',
-    desc: 'AI 生成爆款笔记，标题 + 正文 + Hashtag 一步到位',
-    tags: ['种草', '测评', '教程', '日常分享'],
-    gradient: 'from-red-400 to-pink-500',
-  },
-  {
-    href: '/rewrite',
-    icon: '🔄',
-    title: '多平台文案改写',
-    desc: '一次输入，多平台适配，每个平台风格差异明显',
-    tags: ['小红书', '公众号', '抖音', '知乎', 'B站'],
-    gradient: 'from-blue-400 to-purple-500',
-  },
-  {
-    href: '/scoring',
-    icon: '📊',
-    title: '文案智能评分',
-    desc: '多维度评分 + 专业改进建议，让文案更有转化力',
-    tags: ['吸引力', '可读性', '适配度', '转化力'],
-    gradient: 'from-green-400 to-teal-500',
-  },
-  {
-    href: '/sensitive',
-    icon: '🔍',
-    title: '违禁词检测',
-    desc: '200+ 违禁词库，广告法 + 各平台敏感词全覆盖',
-    tags: ['广告法', '小红书', '抖音', '公众号'],
-    gradient: 'from-orange-400 to-red-500',
-  },
-  {
-    href: '/video-script',
-    icon: '🎬',
-    title: '短视频脚本生成',
-    desc: '分镜脚本 + 口播文案 + BGM 建议，拿来就能拍',
-    tags: ['15s', '30s', '60s', '分镜表'],
-    gradient: 'from-purple-400 to-indigo-500',
-  },
+  { href: '/xiaohongshu', icon: '📕', title: '小红书笔记', desc: 'AI 生成爆款笔记，标题+正文+Hashtag 一步到位', gradient: 'from-red-400 to-pink-500' },
+  { href: '/rewrite', icon: '🔄', title: '多平台改写', desc: '一次输入，多平台适配，风格差异明显', gradient: 'from-blue-400 to-purple-500' },
+  { href: '/scoring', icon: '📊', title: '文案评分', desc: '多维度评分+专业改进建议', gradient: 'from-green-400 to-teal-500' },
+  { href: '/sensitive', icon: '🔍', title: '违禁词检测', desc: '200+ 违禁词库，广告法+平台敏感词', gradient: 'from-orange-400 to-red-500' },
+  { href: '/video-script', icon: '🎬', title: '视频脚本', desc: '分镜脚本+口播文案+BGM建议', gradient: 'from-purple-400 to-indigo-500' },
 ];
 ---
 
 <Layout title="首页">
-  <Navbar current="/" />
+  <Sidebar current="/" />
 
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-pink-600/5"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-      <div class="text-center animate-fade-in">
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-          <span class="gradient-text">AI 创作工具箱</span>
-        </h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
-          一站式自媒体创作助手，覆盖小红书、公众号、抖音等全平台
-        </p>
-        <p class="text-gray-500 max-w-xl mx-auto">
-          5 大功能模块 · AI 驱动 · 流式输出 · 即用即走
-        </p>
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-64 mt-14 lg:mt-0 h-full overflow-y-auto scrollbar-thin">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
+      <!-- Welcome chat bubble -->
+      <div class="flex items-start gap-3 mb-8 animate-fade-in">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm shrink-0 shadow-lg">
+          ✨
+        </div>
+        <div class="flex-1">
+          <div class="bg-white rounded-2xl rounded-tl-sm px-5 py-4 shadow-sm border border-gray-100">
+            <h1 class="text-xl font-bold text-gray-900 mb-2">你好！我是 AI 创作助手 👋</h1>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              我可以帮你写小红书笔记、改写多平台文案、评分优化、检测违禁词、生成视频脚本。选择一个工具开始吧！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick access cards -->
+      <div class="space-y-3">
+        {tools.map((tool, i) => (
+          <a
+            href={tool.href}
+            class="chat-bubble flex items-center gap-4 bg-white rounded-2xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md hover:border-purple-200 transition-all group"
+            style={`animation-delay: ${i * 80}ms`}
+          >
+            <div class={`w-11 h-11 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-xl shadow-md shrink-0 group-hover:scale-105 transition-transform`}>
+              {tool.icon}
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-sm font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">{tool.title}</h3>
+              <p class="text-xs text-gray-400 truncate">{tool.desc}</p>
+            </div>
+            <svg class="w-4 h-4 text-gray-300 group-hover:text-purple-400 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        ))}
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-10 flex items-center justify-center gap-6 text-center animate-fade-in">
+        <div>
+          <p class="text-2xl font-bold gradient-text">5</p>
+          <p class="text-xs text-gray-400">功能模块</p>
+        </div>
+        <div class="w-px h-8 bg-gray-200"></div>
+        <div>
+          <p class="text-2xl font-bold gradient-text">200+</p>
+          <p class="text-xs text-gray-400">违禁词库</p>
+        </div>
+        <div class="w-px h-8 bg-gray-200"></div>
+        <div>
+          <p class="text-2xl font-bold gradient-text">7</p>
+          <p class="text-xs text-gray-400">平台覆盖</p>
+        </div>
       </div>
     </div>
-  </section>
-
-  <!-- Tools Grid -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {tools.map((tool, i) => (
-        <a
-          href={tool.href}
-          class="card-hover group block rounded-2xl bg-white border border-gray-100 p-6 shadow-sm hover:shadow-xl"
-          style={`animation-delay: ${i * 100}ms`}
-        >
-          <div class={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${tool.gradient} text-2xl mb-4 shadow-lg`}>
-            {tool.icon}
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
-            {tool.title}
-          </h3>
-          <p class="text-gray-500 text-sm mb-4 leading-relaxed">
-            {tool.desc}
-          </p>
-          <div class="flex flex-wrap gap-2">
-            {tool.tags.map((tag) => (
-              <span class="px-2 py-1 text-xs font-medium bg-purple-50 text-purple-600 rounded-full">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-gray-100 py-8">
-    <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400">
-      <p>AI 创作工具箱 · Powered by 豆包大模型</p>
-    </div>
-  </footer>
+  </main>
 </Layout>
