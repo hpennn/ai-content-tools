@@ -128,6 +128,9 @@ export async function chat(messages: ChatMessage[]): Promise<string> {
 
 // ===== Prompt 模板 =====
 
+// 平台合规规则：禁止输出域名链接等引流内容
+const COMPLIANCE = '\n\n【合规要求】严禁在文案中出现任何域名（如xxx.com/xxx.cn）、URL链接、二维码、微信号等外部引流信息。如需引导用户，用「搜索品牌名即可找到」「主页有链接」等话术代替。';
+
 export const prompts = {
   // 小红书笔记
   xiaohongshu: (topic: string, keywords: string, style: string) => [
@@ -148,7 +151,7 @@ export const prompts = {
 - 种草：突出产品亮点，用"姐妹们！""绝了！""回购N次"等口语
 - 测评：客观+主观结合，有对比有数据，真实体验感
 - 教程：步骤清晰，简单易学，"手残党也能学会"
-- 日常分享：生活化场景，情感共鸣，真实记录感`,
+- 日常分享：生活化场景，情感共鸣，真实记录感` + COMPLIANCE,
     },
     {
       role: 'user' as const,
@@ -199,7 +202,7 @@ export const prompts = {
 1. 保留原文的核心信息和卖点
 2. 完全适配目标平台的语言风格和用户习惯
 3. 每个版本的差异要足够明显，不能只是简单换几个词
-4. 注意各平台的内容规范和敏感词限制`,
+4. 注意各平台的内容规范和敏感词限制` + COMPLIANCE,
       },
       {
         role: 'user' as const,
@@ -295,7 +298,7 @@ ${text}
 - 种草：产品特写+使用场景+效果对比
 - 测评：开箱+细节展示+使用体验+总结打分
 - 教程：步骤分解+要点提示+效果展示
-- 剧情：冲突设置+情节推进+反转/产品植入`,
+- 剧情：冲突设置+情节推进+反转/产品植入` + COMPLIANCE,
     },
     {
       role: 'user' as const,
