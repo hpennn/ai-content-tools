@@ -18,29 +18,6 @@ const { title, description = 'AI 驱动的自媒体创作工具箱，覆盖小�
     <meta name="baidu-site-verification" content="codeva-NnAoUDTiSz" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} - AI 创作工具箱</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script is:inline>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: { 50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea', 700: '#7e22ce', 800: '#6b21a8', 900: '#581c87' },
-              accent: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777', 700: '#be185d' },
-            },
-            animation: {
-              'fade-in': 'fadeIn 0.4s ease-out',
-              'slide-up': 'slideUp 0.4s ease-out',
-              'slide-in-left': 'slideInLeft 0.3s ease-out',
-            },
-            keyframes: {
-              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-              slideUp: { '0%': { opacity: '0', transform: 'translateY(16px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-              slideInLeft: { '0%': { opacity: '0', transform: 'translateX(-12px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } },
-            },
-          },
-        },
-      };
-    </script>
     <!-- 百度统计 -->
     <script is:inline>
       var _hmt = _hmt || [];
@@ -52,8 +29,7 @@ const { title, description = 'AI 驱动的自媒体创作工具箱，覆盖小�
       })();
     </script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-      body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif; }
       .gradient-text { background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
       .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); }
       .loading-dots::after { content: ''; animation: dots 1.5s steps(4) infinite; }
